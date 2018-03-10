@@ -78,6 +78,17 @@ module.exports = {
   },
 
   /**
+     Returns whether this app is using a module unification format.
+     @private
+     @method isModuleUnification
+     @return {Boolean} Whether this app is using a module unification format.
+  */
+  isAppModuleUnification() {
+    var appSrcPath = path.join(this.project.root, 'src');
+    return existsSync(appSrcPath);
+  },
+
+  /**
    * Inserts placeholders into index.html that are used by the FastBoot server
    * to insert the rendered content into the right spot. Also injects a module
    * for FastBoot application boot.
@@ -92,7 +103,7 @@ module.exports = {
     }
 
     if (type === 'app-boot') {
-      return fastbootAppModule(config.modulePrefix, JSON.stringify(config.APP || {}));
+      return fastbootAppModule(config.modulePrefix, JSON.stringify(config.APP || {}), this.isAppModuleUnification());
     }
 
     // if the fastboot addon is installed, we overwrite the config-module so that the config can be read
